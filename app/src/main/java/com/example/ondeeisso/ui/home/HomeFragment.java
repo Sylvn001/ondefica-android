@@ -1,5 +1,7 @@
 package com.example.ondeeisso.ui.home;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.example.ondeeisso.api.IBGE.Cidades;
 import com.example.ondeeisso.api.IBGE.Estados;
 import com.example.ondeeisso.api.RetrofitConfig;
 import com.example.ondeeisso.databinding.FragmentHomeBinding;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -45,27 +48,26 @@ public class HomeFragment extends Fragment {
     private Estados estadoSel;
     private Cidades cidadeSel;
     private String referenciaSel;
+    private Context context;
 
-    private List<Estados> estados = new ArrayList<Estados>();
+    private List<Estados> estados;
     private List<Cidades> cidades = new ArrayList<Cidades>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+        context = this.getContext();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         btnBuscar = view.findViewById(R.id.btnBuscar);
-        spCidade = view.findViewById(R.id.spCidade);
-        spEstado = view.findViewById(R.id.spEstado);
+        spCidade = (Spinner) view.findViewById(R.id.spCidade);
+        spEstado = (Spinner) view.findViewById(R.id.spEstado);
         etReferencia = view.findViewById(R.id.etReferencia);
 
 
         /*LISTA ESTADOS*/
         chamarWSEstado();
-        ArrayAdapter<String> estadoAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, estados);
-        spEstado.setAdapter(estadoAdapter);
         spEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
                 estadoSel = (Estados) adapterView.getItemAtPosition(i);
-                spEstado.setSelection(i);
                 chamarWSCidade();
             }
 
@@ -77,8 +79,6 @@ public class HomeFragment extends Fragment {
         });
 
         /* LISTA CIDADES */
-        ArrayAdapter<String> cidadeAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, cidades);
-        spCidade.setAdapter(cidadeAdapter);
         spCidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -105,7 +105,13 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<Estados>>() {
             @Override
             public void onResponse(Call<List<Estados>> call, Response<List<Estados>> response) {
+               estados = new ArrayList<Estados>();
                estados.addAll(response.body());
+               ArrayAdapter<Estados> estadoAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, estados);
+               spEstado.setAdapter(estadoAdapter);
+               estadoSel = estados.get(0);
+               chamarWSCidade();
+
             }
             @Override
             public void onFailure(Call<List<Estados>> call, Throwable t) {
@@ -119,7 +125,10 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<Cidades>>() {
             @Override
             public void onResponse(Call<List<Cidades>> call, Response<List<Cidades>> response) {
+                cidades = new ArrayList<Cidades>();
                 cidades.addAll(response.body());
+                ArrayAdapter<String> cidadeAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, cidades);
+                spCidade.setAdapter(cidadeAdapter);
             }
             @Override
             public void onFailure(Call<List<Cidades>> call, Throwable t) {
@@ -138,6 +147,16 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<CEP>> call, Response<List<CEP>> response) {
                 System.out.println(response.body());
+
+                Gson gson = new Gson();
+                List<CEP> cepList = new ArrayList<CEP>();
+                cepList.addAll(response.body());
+                String jsonText = gson.toJson(cepList);
+
+                SharedPreferences prefs = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("ceps", jsonText);
+                editor.commit();
             }
             @Override
             public void onFailure(Call<List<CEP>> call, Throwable t) {
