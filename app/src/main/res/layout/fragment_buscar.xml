@@ -18,7 +18,8 @@
     <Spinner
         android:id="@+id/spEstado"
         android:layout_width="match_parent"
-        android:layout_height="46dp" />
+        android:layout_height="46dp"
+        android:background="#E4E1EC" />
 
     <TextView
         android:id="@+id/txCidade"
@@ -30,7 +31,8 @@
     <Spinner
         android:id="@+id/spCidade"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="48dp"
+        android:background="#E4E1EC" />
 
     <TextView
         android:id="@+id/txReferencia"
@@ -43,6 +45,7 @@
         android:id="@+id/etReferencia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#E4E1EC"
         android:ems="10"
         android:inputType="textPersonName" />
 

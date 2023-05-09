@@ -12,26 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ondeeisso.R;
 import com.example.ondeeisso.api.CEP.CEP;
 import com.example.ondeeisso.api.IBGE.Cidades;
 import com.example.ondeeisso.api.IBGE.Estados;
 import com.example.ondeeisso.api.RetrofitConfig;
-import com.example.ondeeisso.databinding.FragmentHomeBinding;
+import com.example.ondeeisso.databinding.FragmentBuscarBinding;
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
-    private FragmentHomeBinding binding;
+    private FragmentBuscarBinding binding;
 
     private Button btnBuscar;
     private Spinner spEstado;
@@ -55,7 +49,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         context = this.getContext();
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_buscar, container, false);
         btnBuscar = view.findViewById(R.id.btnBuscar);
         spCidade = (Spinner) view.findViewById(R.id.spCidade);
         spEstado = (Spinner) view.findViewById(R.id.spEstado);
