@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitConfig {
    private final Retrofit retrofitCEP;
    private final Retrofit retrofitIBGE;
-//   private final Retrofit retrofitMaps;
+   private final Retrofit retrofitMaps;
 
    public RetrofitConfig() {
        Gson gson = new GsonBuilder().setLenient().create();
@@ -28,8 +28,8 @@ public class RetrofitConfig {
        retrofitIBGE = new Retrofit.Builder().baseUrl("https://servicodados.ibge.gov.br/api/v1/")
                .addConverterFactory(GsonConverterFactory.create()).build();
 
-//       retrofitMaps = new Retrofit.Builder().baseUrl("")
-//               .addConverterFactory(GsonConverterFactory.create()).build();
+       retrofitMaps = new Retrofit.Builder().baseUrl("http://maps.googleapis.com/maps/api/geocode/")
+               .addConverterFactory(GsonConverterFactory.create()).build();
    }
 
    public CEPService getCEPService() {

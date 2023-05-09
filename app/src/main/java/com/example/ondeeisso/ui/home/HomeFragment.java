@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     private Spinner spCidade;
     private EditText etReferencia;
     private Estados estadoSel;
-    private String cidadeSel;
+    private Cidades cidadeSel;
     private String referenciaSel;
 
     private List<Estados> estados = new ArrayList<Estados>();
@@ -64,9 +64,7 @@ public class HomeFragment extends Fragment {
         spEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
-                System.out.println("aaaaaaaaaaaaaaaaaaaa");
                 estadoSel = (Estados) adapterView.getItemAtPosition(i);
-                System.out.println(estadoSel.getSigla());
                 spEstado.setSelection(i);
                 chamarWSCidade();
             }
@@ -78,23 +76,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /* LISTA CIDADES */
         ArrayAdapter<String> cidadeAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, cidades);
         spCidade.setAdapter(cidadeAdapter);
         spCidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                cidadeSel = adapterView.getItemAtPosition(i).toString();
+                cidadeSel = (Cidades) adapterView.getItemAtPosition(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                cidadeSel =  adapterView.getItemAtPosition(0).toString();
+                cidadeSel = (Cidades)  adapterView.getItemAtPosition(0);
             }
         });
 
 
         btnBuscar.setOnClickListener(e -> {
             referenciaSel = etReferencia.getText().toString();
+            buscaCeps();
         });
 
         return view;
@@ -129,12 +129,21 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void buscaCidades(){
-
-    }
-
     private void buscaCeps(){
+        String uf = estadoSel.getSigla();
+        String cidade = cidadeSel.getNome();
+        Call<List<CEP>> call = new RetrofitConfig().getCEPService().buscarCEP(uf, cidade, referenciaSel);
 
+        call.enqueue(new Callback<List<CEP>>() {
+            @Override
+            public void onResponse(Call<List<CEP>> call, Response<List<CEP>> response) {
+                System.out.println(response.body());
+            }
+            @Override
+            public void onFailure(Call<List<CEP>> call, Throwable t) {
+                Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
+            }
+        });
     }
 
     @Override

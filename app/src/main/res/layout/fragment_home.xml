@@ -18,8 +18,7 @@
     <Spinner
         android:id="@+id/spEstado"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:padding="10dp" />
+        android:layout_height="46dp" />
 
     <TextView
         android:id="@+id/txCidade"
@@ -31,7 +30,7 @@
     <Spinner
         android:id="@+id/spCidade"
         android:layout_width="match_parent"
-        android:layout_height="39dp" />
+        android:layout_height="48dp" />
 
     <TextView
         android:id="@+id/txReferencia"
