@@ -1,4 +1,4 @@
-package com.example.ondeeisso.ui.home;
+package com.example.ondeeisso.ui.buscar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment {
+public class BuscarFragment extends Fragment {
     private FragmentBuscarBinding binding;
 
     private Button btnBuscar;
