@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".ui.home.HomeFragment">
+
+    <TextView
+        android:id="@+id/txEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Estado" />
+
+    <Spinner
+        android:id="@+id/spEstado"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/txCidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Cidade" />
+
+    <Spinner
+        android:id="@+id/spCidade"
+        android:layout_width="match_parent"
+        android:layout_height="39dp" />
+
+    <TextView
+        android:id="@+id/txReferencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Referencia" />
+
+    <EditText
+        android:id="@+id/etReferencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|center_vertical"
+        android:text="Buscar" />
+</LinearLayout>
