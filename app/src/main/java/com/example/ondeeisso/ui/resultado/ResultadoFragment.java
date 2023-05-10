@@ -14,10 +14,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ondeeisso.R;
 import com.example.ondeeisso.api.CEP.CEP;
+import com.example.ondeeisso.api.CEP.CEPAdapter;
 import com.example.ondeeisso.databinding.FragmentResultadoBinding;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ResultadoFragment extends Fragment {
@@ -34,14 +37,17 @@ public class ResultadoFragment extends Fragment {
 
         Gson gson = new Gson();
         String jsonText  = prefs.getString("ceps","");
-        List<CEP> listaCeps = gson.fromJson(jsonText, List.class);
+
+        CEP[] arrayCeps =  gson.fromJson(jsonText, CEP[].class);
+        List<CEP> listaCeps = Arrays.asList(arrayCeps);
 
         View view = inflater.inflate(R.layout.fragment_resultado, container, false);
-        ArrayAdapter<CEP> adapter;
-        adapter = new ArrayAdapter<CEP>(context, android.R.layout.simple_list_item_1, listaCeps);
+        CEPAdapter adapter = new CEPAdapter(context, R.layout.cep_item, listaCeps);
 
         lvResultados = view.findViewById(R.id.lvResultados);
         lvResultados.setAdapter(adapter);
+
+
 
 
 
