@@ -31,7 +31,6 @@ public class ResultadoFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getContext();
-        binding = FragmentResultadoBinding.inflate(inflater, container, false);
 
         SharedPreferences prefs = context.getSharedPreferences("config", Context.MODE_PRIVATE);
 
@@ -46,9 +45,6 @@ public class ResultadoFragment extends Fragment {
 
         lvResultados = view.findViewById(R.id.lvResultados);
         lvResultados.setAdapter(adapter);
-
-
-
 
 
         return view;

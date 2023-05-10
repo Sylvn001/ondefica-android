@@ -2,17 +2,29 @@ package com.example.ondeeisso.api.CEP;
 import com.example.ondeeisso.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.ondeeisso.R;
+import com.example.ondeeisso.api.Geocoding.Geocoding;
+import com.example.ondeeisso.api.Geocoding.Geometry;
+import com.example.ondeeisso.api.Geocoding.Location;
+import com.example.ondeeisso.api.Geocoding.Result;
+import com.example.ondeeisso.api.RetrofitConfig;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import com.example.ondeeisso.api.Geocoding.Geocoding.*;
 
 public class CEPAdapter extends ArrayAdapter<CEP> {
     private int layout;
@@ -42,11 +54,33 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
         txcep.setText("" + cep.getCep());
 
         convertView.setOnClickListener(e -> {
-            System.out.println("aaaaaaaaaa");
-            System.out.println(cep.getLogradouro());
+            String searchString = cep.getLogradouro() + ", " + cep.getBairro() + ", " + cep.getLocalidade() + ", " + cep.getUf();
+            chamarWsGeocoding(searchString);
         });
 
         return convertView;
+    }
+
+    private void chamarWsGeocoding(String searchString){
+        Call<Geocoding> call = new RetrofitConfig().getGeocodingService().buscarLatitudeLongitude(searchString);
+        call.enqueue(new Callback<Geocoding>() {
+            @Override
+            public void onResponse(Call<Geocoding> call, Response<Geocoding> response) {
+                if(response.body().status.equalsIgnoreCase("OK"))
+                {
+                    Geocoding geo = response.body();
+                    Result result =  geo.results.get(0);
+                    Geometry geometry = result.geometry;
+                    Location location = geometry.location;
+                }else{
+                    Toast.makeText(getContext(), "Não foi possivel realizar a busca", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Geocoding> call, Throwable t) {
+                Log.e("CEPService   ", "Erro ao buscar o geocoding:" + t.getMessage());
+            }
+        });
     }
 
 }

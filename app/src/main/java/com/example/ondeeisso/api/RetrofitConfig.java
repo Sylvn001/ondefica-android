@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.ondeeisso.api.CEP.CEP;
 import com.example.ondeeisso.api.CEP.CEPService;
+import com.example.ondeeisso.api.Geocoding.GeocodingService;
 import com.example.ondeeisso.api.IBGE.IBGEService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,7 +29,7 @@ public class RetrofitConfig {
        retrofitIBGE = new Retrofit.Builder().baseUrl("https://servicodados.ibge.gov.br/api/v1/")
                .addConverterFactory(GsonConverterFactory.create()).build();
 
-       retrofitMaps = new Retrofit.Builder().baseUrl("http://maps.googleapis.com/maps/api/geocode/")
+       retrofitMaps = new Retrofit.Builder().baseUrl("https://maps.googleapis.com/maps/api/")
                .addConverterFactory(GsonConverterFactory.create()).build();
    }
 
@@ -39,4 +40,6 @@ public class RetrofitConfig {
    public IBGEService getIBGEService(){
        return this.retrofitIBGE.create(IBGEService.class);
    }
+
+   public GeocodingService getGeocodingService(){return this.retrofitMaps.create(GeocodingService.class);}
 }

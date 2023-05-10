@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -137,26 +138,33 @@ public class BuscarFragment extends Fragment {
         String cidade = cidadeSel.getNome();
         Call<List<CEP>> call = new RetrofitConfig().getCEPService().buscarCEP(uf, cidade, referenciaSel);
 
-        call.enqueue(new Callback<List<CEP>>() {
-            @Override
-            public void onResponse(Call<List<CEP>> call, Response<List<CEP>> response) {
-                System.out.println(response.body());
+        if(uf.isEmpty() || cidade.isEmpty() || referenciaSel.isEmpty()){
+            Toast.makeText(context, "Os dados não podem estar em branco!", Toast.LENGTH_SHORT).show();
+        }else{
+            call.enqueue(new Callback<List<CEP>>() {
+                @Override
+                public void onResponse(Call<List<CEP>> call, Response<List<CEP>> response) {
+                    if(response.body() != null){
+                        Gson gson = new Gson();
+                        List<CEP> cepList = new ArrayList<CEP>();
+                        cepList.addAll(response.body());
+                        String jsonText = gson.toJson(cepList);
 
-                Gson gson = new Gson();
-                List<CEP> cepList = new ArrayList<CEP>();
-                cepList.addAll(response.body());
-                String jsonText = gson.toJson(cepList);
+                        SharedPreferences prefs = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("ceps", jsonText);
+                        editor.commit();
 
-                SharedPreferences prefs = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("ceps", jsonText);
-                editor.commit();
-            }
-            @Override
-            public void onFailure(Call<List<CEP>> call, Throwable t) {
-                Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
-            }
-        });
+                        Toast.makeText(context, "Sucesso ao buscar enderecos!", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<CEP>> call, Throwable t) {
+                    Log.e("CEPService   ", "Erro ao buscar o cep:" + t.getMessage());
+                }
+            });
+        }
     }
 
     @Override
