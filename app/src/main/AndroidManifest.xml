@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ondeeisso"
         tools:targetApi="31">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAl3DIOS1BhSlDGBouwSGrv8TI7eaE1CpE"></meta-data>
         <activity
             android:name=".MainActivity"
             android:exported="true"

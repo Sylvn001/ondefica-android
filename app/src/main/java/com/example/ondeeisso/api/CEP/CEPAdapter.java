@@ -2,6 +2,7 @@ package com.example.ondeeisso.api.CEP;
 import com.example.ondeeisso.R;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding.*;
+import com.google.gson.Gson;
 
 public class CEPAdapter extends ArrayAdapter<CEP> {
     private int layout;
@@ -70,8 +72,25 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
                 {
                     Geocoding geo = response.body();
                     Result result =  geo.results.get(0);
-                    Geometry geometry = result.geometry;
-                    Location location = geometry.location;
+                    try{
+                        if(result != null){
+                            Geometry geometry =  result.geometry;
+                            if(geometry != null){
+                                Location location = geometry.location;
+                                if(location != null){
+                                    Gson gson = new Gson();
+                                    String jsonText = gson.toJson(location);
+                                    SharedPreferences prefs = getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putString("location", jsonText);
+                                    editor.commit();
+                                    System.out.println(jsonText);
+                                }
+                            }
+                        }
+                    }catch(Error e){
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     Toast.makeText(getContext(), "Não foi possivel realizar a busca", Toast.LENGTH_SHORT).show();
                 }
