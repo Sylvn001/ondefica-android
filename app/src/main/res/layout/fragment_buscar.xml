@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:padding="10dp"
     tools:context=".ui.buscar.BuscarFragment">
 
     <TextView
@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:background="#E4E1EC"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:padding="10dp" />
 
     <Button
         android:id="@+id/btnBuscar"

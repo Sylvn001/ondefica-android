@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding;
 import com.example.ondeeisso.api.Geocoding.Geometry;
@@ -26,14 +29,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding.*;
+import com.example.ondeeisso.ui.slideshow.SlideshowFragment;
 import com.google.gson.Gson;
 
 public class CEPAdapter extends ArrayAdapter<CEP> {
     private int layout;
+    private FragmentManager fragmanager;
 
-    public CEPAdapter(@NonNull Context context, int resource, @NonNull List<CEP> ceps) {
+    public CEPAdapter(@NonNull Context context, int resource, @NonNull List<CEP> ceps, FragmentManager fragm) {
         super(context, resource, ceps);
         this.layout = resource;
+        this.fragmanager = fragm;
     }
 
     @Override
@@ -58,6 +64,11 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
         convertView.setOnClickListener(e -> {
             String searchString = cep.getLogradouro() + ", " + cep.getBairro() + ", " + cep.getLocalidade() + ", " + cep.getUf();
             chamarWsGeocoding(searchString);
+
+            /*Trocar fragment*/
+            FragmentTransaction ft = fragmanager.beginTransaction();
+            ft.replace(R.id.nav_host_fragment_content_main, new SlideshowFragment());
+            ft.commit();
         });
 
         return convertView;

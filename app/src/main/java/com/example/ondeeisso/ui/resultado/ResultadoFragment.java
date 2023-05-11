@@ -38,14 +38,18 @@ public class ResultadoFragment extends Fragment {
         String jsonText  = prefs.getString("ceps","");
 
         CEP[] arrayCeps =  gson.fromJson(jsonText, CEP[].class);
-        List<CEP> listaCeps = Arrays.asList(arrayCeps);
+        List<CEP> listaCeps;
+        if(arrayCeps.length > 0){
+            listaCeps= Arrays.asList(arrayCeps);
+        }else{
+            listaCeps = new ArrayList<CEP>();
+        }
 
         View view = inflater.inflate(R.layout.fragment_resultado, container, false);
-        CEPAdapter adapter = new CEPAdapter(context, R.layout.cep_item, listaCeps);
+        CEPAdapter adapter = new CEPAdapter(context, R.layout.cep_item, listaCeps, getActivity().getSupportFragmentManager());
 
         lvResultados = view.findViewById(R.id.lvResultados);
         lvResultados.setAdapter(adapter);
-
 
         return view;
     }

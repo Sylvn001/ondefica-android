@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ondeeisso.R;
 import com.example.ondeeisso.api.CEP.CEP;
@@ -24,6 +26,8 @@ import com.example.ondeeisso.api.IBGE.Cidades;
 import com.example.ondeeisso.api.IBGE.Estados;
 import com.example.ondeeisso.api.RetrofitConfig;
 import com.example.ondeeisso.databinding.FragmentBuscarBinding;
+import com.example.ondeeisso.ui.resultado.ResultadoFragment;
+import com.example.ondeeisso.ui.slideshow.SlideshowFragment;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -48,8 +52,11 @@ public class BuscarFragment extends Fragment {
     private List<Estados> estados;
     private List<Cidades> cidades = new ArrayList<Cidades>();
 
+    private FragmentManager fragmanager;
+
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         context = this.getContext();
+        fragmanager = getActivity().getSupportFragmentManager();
         View view = inflater.inflate(R.layout.fragment_buscar, container, false);
         btnBuscar = view.findViewById(R.id.btnBuscar);
         spCidade = (Spinner) view.findViewById(R.id.spCidade);
@@ -106,7 +113,6 @@ public class BuscarFragment extends Fragment {
                spEstado.setAdapter(estadoAdapter);
                estadoSel = estados.get(0);
                chamarWSCidade();
-
             }
             @Override
             public void onFailure(Call<List<Estados>> call, Throwable t) {
@@ -154,9 +160,11 @@ public class BuscarFragment extends Fragment {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("ceps", jsonText);
                         editor.commit();
-
                         Toast.makeText(context, "Sucesso ao buscar enderecos!", Toast.LENGTH_SHORT).show();
 
+                        FragmentTransaction ft = fragmanager.beginTransaction();
+                        ft.replace(R.id.nav_host_fragment_content_main, new ResultadoFragment());
+                        ft.commit();
                     }
                 }
                 @Override
