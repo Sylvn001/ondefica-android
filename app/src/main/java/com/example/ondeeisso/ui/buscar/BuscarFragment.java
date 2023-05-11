@@ -1,5 +1,6 @@
 package com.example.ondeeisso.ui.buscar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,12 +20,15 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.ondeeisso.R;
 import com.example.ondeeisso.api.CEP.CEP;
 import com.example.ondeeisso.api.IBGE.Cidades;
 import com.example.ondeeisso.api.IBGE.Estados;
 import com.example.ondeeisso.api.RetrofitConfig;
+import com.example.ondeeisso.databinding.ActivityMainBinding;
 import com.example.ondeeisso.databinding.FragmentBuscarBinding;
 import com.example.ondeeisso.ui.resultado.ResultadoFragment;
 import com.example.ondeeisso.ui.slideshow.SlideshowFragment;
@@ -57,6 +61,7 @@ public class BuscarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         context = this.getContext();
         fragmanager = getActivity().getSupportFragmentManager();
+
         View view = inflater.inflate(R.layout.fragment_buscar, container, false);
         btnBuscar = view.findViewById(R.id.btnBuscar);
         spCidade = (Spinner) view.findViewById(R.id.spCidade);
@@ -162,9 +167,11 @@ public class BuscarFragment extends Fragment {
                         editor.commit();
                         Toast.makeText(context, "Sucesso ao buscar enderecos!", Toast.LENGTH_SHORT).show();
 
-                        FragmentTransaction ft = fragmanager.beginTransaction();
-                        ft.replace(R.id.nav_host_fragment_content_main, new ResultadoFragment());
-                        ft.commit();
+//                        FragmentTransaction ft = fragmanager.beginTransaction();
+//                        ft.replace(R.id.nav_host_fragment_content_main, new ResultadoFragment());
+//                        ft.commit();
+
+//                        Navigation.findNavController(getC).navigate(R.id.nav_resultado);
                     }
                 }
                 @Override

@@ -33,7 +33,6 @@ public class ResultadoFragment extends Fragment {
         context = getContext();
 
         SharedPreferences prefs = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-
         Gson gson = new Gson();
         String jsonText  = prefs.getString("ceps","");
 

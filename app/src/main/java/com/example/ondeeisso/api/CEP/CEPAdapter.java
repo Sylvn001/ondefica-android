@@ -30,6 +30,7 @@ import retrofit2.Response;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding.*;
 import com.example.ondeeisso.ui.slideshow.SlideshowFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 public class CEPAdapter extends ArrayAdapter<CEP> {
@@ -63,18 +64,18 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
 
         convertView.setOnClickListener(e -> {
             String searchString = cep.getLogradouro() + ", " + cep.getBairro() + ", " + cep.getLocalidade() + ", " + cep.getUf();
-            chamarWsGeocoding(searchString);
+            chamarWsGeocoding(searchString, cep);
 
             /*Trocar fragment*/
-            FragmentTransaction ft = fragmanager.beginTransaction();
-            ft.replace(R.id.nav_host_fragment_content_main, new SlideshowFragment());
-            ft.commit();
+//            FragmentTransaction ft = fragmanager.beginTransaction();
+//            ft.replace(R.id.nav_host_fragment_content_main, new SlideshowFragment());
+//            ft.commit();
         });
 
         return convertView;
     }
 
-    private void chamarWsGeocoding(String searchString){
+    private void chamarWsGeocoding(String searchString, CEP cep){
         Call<Geocoding> call = new RetrofitConfig().getGeocodingService().buscarLatitudeLongitude(searchString);
         call.enqueue(new Callback<Geocoding>() {
             @Override
@@ -88,12 +89,15 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
                             Geometry geometry =  result.geometry;
                             if(geometry != null){
                                 Location location = geometry.location;
+                                LatLng latlng= new LatLng(location.lat, location.lng);
                                 if(location != null){
                                     Gson gson = new Gson();
-                                    String jsonText = gson.toJson(location);
+                                    String jsonText = gson.toJson(latlng);
+                                    String jsonCEP = gson.toJson(cep);
                                     SharedPreferences prefs = getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = prefs.edit();
                                     editor.putString("location", jsonText);
+                                    editor.putString("cepSel", jsonCEP);
                                     editor.commit();
                                     System.out.println(jsonText);
                                 }
