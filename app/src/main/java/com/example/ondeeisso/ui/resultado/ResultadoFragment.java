@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.ondeeisso.R;
 import com.example.ondeeisso.api.CEP.CEP;
@@ -45,7 +46,7 @@ public class ResultadoFragment extends Fragment {
         }
 
         View view = inflater.inflate(R.layout.fragment_resultado, container, false);
-        CEPAdapter adapter = new CEPAdapter(context, R.layout.cep_item, listaCeps, getActivity().getSupportFragmentManager());
+        CEPAdapter adapter = new CEPAdapter(context, R.layout.cep_item, listaCeps, getActivity().getSupportFragmentManager(), NavHostFragment.findNavController(ResultadoFragment.this));
 
         lvResultados = view.findViewById(R.id.lvResultados);
         lvResultados.setAdapter(adapter);

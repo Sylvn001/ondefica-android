@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding;
 import com.example.ondeeisso.api.Geocoding.Geometry;
@@ -29,6 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.example.ondeeisso.api.Geocoding.Geocoding.*;
+import com.example.ondeeisso.ui.buscar.BuscarFragment;
+import com.example.ondeeisso.ui.resultado.ResultadoFragment;
 import com.example.ondeeisso.ui.slideshow.SlideshowFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -36,11 +40,13 @@ import com.google.gson.Gson;
 public class CEPAdapter extends ArrayAdapter<CEP> {
     private int layout;
     private FragmentManager fragmanager;
+    private  NavController navController;
 
-    public CEPAdapter(@NonNull Context context, int resource, @NonNull List<CEP> ceps, FragmentManager fragm) {
+    public CEPAdapter(@NonNull Context context, int resource, @NonNull List<CEP> ceps, FragmentManager fragm, NavController navController) {
         super(context, resource, ceps);
         this.layout = resource;
         this.fragmanager = fragm;
+        this.navController = navController;
     }
 
     @Override
@@ -66,10 +72,7 @@ public class CEPAdapter extends ArrayAdapter<CEP> {
             String searchString = cep.getLogradouro() + ", " + cep.getBairro() + ", " + cep.getLocalidade() + ", " + cep.getUf();
             chamarWsGeocoding(searchString, cep);
 
-            /*Trocar fragment*/
-//            FragmentTransaction ft = fragmanager.beginTransaction();
-//            ft.replace(R.id.nav_host_fragment_content_main, new SlideshowFragment());
-//            ft.commit();
+            navController.navigate(R.id.action_SecondFragment_to_ThirdFragment);
         });
 
         return convertView;

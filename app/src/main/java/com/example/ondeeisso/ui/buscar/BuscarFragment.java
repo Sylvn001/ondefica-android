@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -59,6 +60,8 @@ public class BuscarFragment extends Fragment {
     private FragmentManager fragmanager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentBuscarBinding.inflate(inflater, container, false);
+
         context = this.getContext();
         fragmanager = getActivity().getSupportFragmentManager();
 
@@ -165,13 +168,10 @@ public class BuscarFragment extends Fragment {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("ceps", jsonText);
                         editor.commit();
-                        Toast.makeText(context, "Sucesso ao buscar enderecos!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Sucesso ao buscar enderecos! - Resultdos encontrdos: " + cepList.size(), Toast.LENGTH_SHORT).show();
 
-//                        FragmentTransaction ft = fragmanager.beginTransaction();
-//                        ft.replace(R.id.nav_host_fragment_content_main, new ResultadoFragment());
-//                        ft.commit();
-
-//                        Navigation.findNavController(getC).navigate(R.id.nav_resultado);
+                        NavHostFragment.findNavController(BuscarFragment.this)
+                                .navigate(R.id.action_FirstFragment_to_SecondFragment);
                     }
                 }
                 @Override
@@ -181,6 +181,8 @@ public class BuscarFragment extends Fragment {
             });
         }
     }
+
+
 
     @Override
     public void onDestroyView() {
